@@ -24,8 +24,8 @@ function sendWeatherInfo(req, res) {
     var key = "fdd7644f33ac6e3c158e6ea9f1b9c526" // key
 
     // i used units=metric to get celcius
-    axios("https://api.openweathermap.org/data/2.5/forecast?q="+city+"&appid="+key)
-    .then(Response => { // get weather forecst api&units=metric
+    axios("https://api.openweathermap.org/data/2.5/forecast?q="+city+"&units=metric&appid="+key)
+    .then(Response => { // get weather forecst api
 
         cityWeatherData = Response.data
 
