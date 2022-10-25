@@ -1,0 +1,93 @@
+<!-- <div id="app">{{ message }}</div>
+
+<script type="module">
+    import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
+
+    createApp({
+        data() {
+            return {
+                message: 'Hello Vue!'
+            }
+        }
+    }).mount('#app') 
+
+</script> -->
+
+
+<!-- <script type="module">
+    import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
+
+    createApp({
+        data() {
+            return {
+                message: 'Hello Vue!',
+                seen: true,
+                list: ["milk", "coffee", "water"]
+            }
+        }
+    }).mount('#app') 
+</script>
+
+<div id="app">
+    <p>{{ message }}</p>
+    <span v-if="seen">Now you see me</span>
+    <ol>
+        <li v-for="item of list"> 
+            {{ item }}
+        </li>
+    </ol>
+    <button v-on:click="list.reverse()">Reverse List</button>
+    <input v-model="message">
+    
+</div> -->
+
+
+<!-- development version, includes helpful console warnings -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> -->
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+<script type = "module">
+    import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
+    // import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
+    var app = new Vue({
+        el: '#app',
+        data: {
+            randMin: 1,
+            randMax: 10,
+            random: -1,
+            history: []
+        },
+        methods: {
+            GetRand: getRandom
+        }
+    })
+
+    function getRandom() {
+        console.log("getRandom called")
+        let prom = fetch("random/" + this.randMin + "/" + this.randMax)
+        prom.then(response => response.json())
+            .then(response => {
+                this.random = response.result
+                this.history.push(response.result)
+            })
+    }
+</script>
+
+
+<div id="app">
+    <h1>Welcome to the Random Number Generator</h1>
+    Please enter a minimum and a maximum as the range of the Random Number
+    <br>
+    Minimum: <input v-model="randMin"> <input v-model="randMax"> <br><br>
+    <button v-on:click="GetRand">Generate Random Number</button>
+    between {{randMin}} and {{randMax}}
+    <br> Latest Random Number is {{random}}
+    <span v-if="history.length>0">
+        <hr>
+        <h1>History of Numbers generated</h1>
+        <ul>
+            <li v-for="num in history">{{num}}</li>
+        </ul>
+    </span>
+</div>

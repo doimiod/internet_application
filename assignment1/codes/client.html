@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="utf-8">
+        <title>Weather Forecast App</title>
+    </head>
+
+
+    <div id = "app">
+
+        <div class="header">
+            <h1>Weather Forecast App</h1>
+        </div>
+
+        <div class="form">
+
+            <input type="text" v-model="cityName" id="user-input" placeholder="enter the name of city" required> 
+            <!-- <input id="btn" type="submit" onclick="getCityInfo()"; value="submit" > -->
+            <button v-on:click="getCity">submit</button>
+
+            <h1>{{city}}</h1>
+
+        
+        </div>
+
+        <span v-if="clicked">
+            <!-- for 4 iterations -->
+            <span v-for="(date, index) in date">
+                <dev>
+                    <h2>{{date}}</h2>
+                    <p>It will be {{tempStat[index]}} as the average temparature is {{tempAvg[index]}}℃</p>
+                    <p>H: {{highestTemp[index]}}℃ L: {{lowestTemp[index]}}℃</p>
+                    <p>Average wind speed of the day: {{winSpAvg[index]}}m/s</p>
+                    <p>Do I need an umbrella?: {{yesOrNo[index]}}</p>
+                    <!-- <p>Rainfall level: {{rainfallLevel}}</p> -->
+                </dev>
+            </span>
+
+            <div>
+                <h2>Air Pollution info</h2>
+                <span v-if="needMask">It is recommended to wear a mask as there is much PM2.5</span>
+                <span v-else>There is no need to wear a mask for PM2.5</span>
+            </div>
+
+        </span>
+
+    </div>
+
+</html>
+
+<script type="module">
+    import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
+    createApp({
+        data() {
+            return {
+                clicked: false,
+                city: "",
+                date: [],
+                tempStat: [],
+                tempavg: [],
+                highestTemp: [],
+                lowestTemp: [],
+                winSpAvg: [],
+                yasOrNo: [],
+                rainfallLevel: []
+                // message: 'Hello Vue!',
+                // seen: true,
+                // list: ["milk", "coffee", "water"]
+            } 
+         },
+         methods: {
+            getCity: getCityInfo
+        }
+        }).mount('#app')
+
+
+
+        function getCityInfo() {
+            this.clicked = true
+            console.log("getCityInfo called")
+            let prom = fetch("weatherforecast/" + this.cityName)
+            prom.then(response => response.json())
+                .then(response => {
+                    this.city = response.cityName
+                    this.date = response.date
+                    this.tempAvg = response.tempAvg
+                    this.tempStat = response.tempStat
+                    this.highestTemp = response.highestTemp
+                    this.lowestTemp = response.lowestTemp
+                    this.winSpAvg = response.winSpAvg
+                    this.yesOrNo = response.yesOrNo
+                    this.rainfallLevel = response.rainfallLevel
+                    this.needMask = response.needMask
+                    // this.random = response.result
+                    // this.history.push(response.result)
+                })
+        }
+        
+</script>
