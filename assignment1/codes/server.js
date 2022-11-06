@@ -35,10 +35,10 @@ function sendWeatherInfo(req, res) {
         var lat = cityWeatherData.city.coord.lat // get lat
         var lon = cityWeatherData.city.coord.lon // get lon
 
-        console.log(cityName)
-        console.log(lat)
-        console.log(lon)
-        console.log(cityWeatherData.list.length)
+        console.log("city name is "+cityName)
+        console.log("latitude is "+lat)
+        console.log("longtitude is "+lon)
+        console.log("it has "+cityWeatherData.list.length+" data")
 
 
         // const date = new Date(unixTimestamp * 1000);
@@ -64,9 +64,11 @@ function sendWeatherInfo(req, res) {
 
         contarminated = false
         cityPollutionData = Response.data
-
+        console.log("below is amount of PM2_5")
+        
         for(let i = 0; i<cityPollutionData.list.length; i++){
             var amountOfPM2_5 = cityPollutionData.list[i].components.pm2_5
+            
             console.log(amountOfPM2_5)
             if(amountOfPM2_5 > 10){
                 contarminated = true
@@ -75,8 +77,8 @@ function sendWeatherInfo(req, res) {
         }
         
         res.json({
-            date: dateArr,
             cityName: cityName,
+            date: dateArr,
             tempAvg: tempAvgArr,
             tempStat: tempStatArr,
             highestTemp: highestTempArr,
@@ -97,9 +99,11 @@ function getDate(cityWeatherData){
 
     dateArr = []
     k = 0
+    console.log("below is time")
     for(let i = 0; i< cityWeatherData.list.length; i++){
 
         let date = cityWeatherData.list[i].dt_txt.slice(11, 19)
+        
         console.log(date)
         if(date == "00:00:00" && i!=0){
             dateArr[k] = cityWeatherData.list[i].dt_txt.slice(0, 10)
@@ -160,8 +164,8 @@ function dataCalc(cityWeatherData){
             if(cityWeatherData.list[i].weather[0].main.includes("Rain"))
             willBeRainy = true
 
-            // if(cityWeatherData.list[i].rain['3h']!=null)
-            // sumRainfallLevel = sumRainfallLevel + cityWeatherData.list[i].rain['3h']
+            if(cityWeatherData.list[i].rain !=null)
+            sumRainfallLevel = sumRainfallLevel + cityWeatherData.list[i].rain['3h']
             
             j++
         }
@@ -205,7 +209,6 @@ function dataCalc(cityWeatherData){
             sumRainfallLevel = 0
             j = 0
         }
-
 
     }
 

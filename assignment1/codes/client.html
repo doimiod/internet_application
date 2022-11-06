@@ -33,7 +33,7 @@
                     <p>H: {{highestTemp[index]}}℃ L: {{lowestTemp[index]}}℃</p>
                     <p>Average wind speed of the day: {{winSpAvg[index]}}m/s</p>
                     <p>Do I need an umbrella?: {{yesOrNo[index]}}</p>
-                    <!-- <p>Rainfall level: {{rainfallLevel}}</p> -->
+                    <p>Rainfall level: {{rainfallLevel[index]}}</p>
                 </dev>
             </span>
 
@@ -73,8 +73,6 @@
             getCity: getCityInfo
         }
         }).mount('#app')
-
-
 
         function getCityInfo() {
             this.clicked = true
