@@ -39,9 +39,14 @@
             </span>
 
             <div>
-                <h2>Air Pollution info</h2>
-                <span v-if="needMask">It is recommended to wear a mask as there is much PM2.5</span>
-                <span v-else>There is no need to wear a mask for PM2.5</span>
+                <span v-if="error">
+                    <h3>please type a valid city name</h3>
+                </span>
+                <span v-else>
+                    <h2>Air Pollution info</h2>
+                    <span v-if="needMask">It is recommended to wear a mask as there is much PM2.5</span>
+                    <span v-else>There is no need to wear a mask for PM2.5</span>
+            </span>
             </div>
 
         </span>
@@ -65,7 +70,8 @@
                 lowestTemp: [],
                 winSpAvg: [],
                 yasOrNo: [],
-                rainfallLevel: []
+                rainfallLevel: [],
+                error: ""
                 // message: 'Hello Vue!',
                 // seen: true,
                 // list: ["milk", "coffee", "water"]
@@ -93,6 +99,7 @@
                     this.yesOrNo = response.yesOrNo
                     this.rainfallLevel = response.rainfallLevel
                     this.needMask = response.needMask
+                    this.error = response.error
                     // this.random = response.result
                     // this.history.push(response.result)
                 })

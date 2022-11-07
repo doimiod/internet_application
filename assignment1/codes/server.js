@@ -35,7 +35,7 @@ function sendWeatherInfo(req, res) {
         var cityName = cityWeatherData.city.name // get the name of the city
         var lat = cityWeatherData.city.coord.lat // get lat
         var lon = cityWeatherData.city.coord.lon // get lon
-        var timezone = cityWeatherData.city.timezone
+        var timezone = cityWeatherData.city.timezone //get timezone
         timezone = timezone/3600
         var plusOrMinus = ""
         if(timezone>=0)
@@ -188,7 +188,7 @@ function dataCalc(cityWeatherData){
 
         let time = cityWeatherData.list[i].dt_txt.slice(11, 19)
 
-        if(time == "00:00:00" && startcalc == false){
+        if(time == "00:00:00" && startcalc == false){ //finds next day
             startcalc = true
         }
 
