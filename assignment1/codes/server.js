@@ -33,8 +33,8 @@ function sendWeatherInfo(req, res) {
         console.log(cityWeatherData)
 
         var cityName = cityWeatherData.city.name // get the name of the city
-        var lat = cityWeatherData.city.coord.lat // get lat
-        var lon = cityWeatherData.city.coord.lon // get lon
+        var lat = cityWeatherData.city.coord.lat // get latitude
+        var lon = cityWeatherData.city.coord.lon // get longtitude
         var timezone = cityWeatherData.city.timezone //get timezone
         timezone = timezone/3600
         var plusOrMinus = ""
@@ -50,10 +50,6 @@ function sendWeatherInfo(req, res) {
         // const sunriseTimeStamp = new Date(cityWeatherData.city.sunrise * 1000);
         // var sunriseHours = sunriseTimeStamp.getHours();
         // var sunriseMinutes = sunriseTimeStamp.getMinutes();
-
-        // console.log("memo")
-        // console.log(sunriseHours, sunriseMinutes)
-        // console.log("sun rises at "+ sunriseHours + ":" + sunriseMinutes)
 
         // const sunsetTimeStamp = new Date(cityWeatherData.city.sunset * 1000);
         // var hours = sunsetTimeStamp.getHours();
