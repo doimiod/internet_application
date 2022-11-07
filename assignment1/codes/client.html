@@ -18,11 +18,12 @@
             <input type="text" v-model="cityName" id="user-input" placeholder="enter the name of city" required> 
             <!-- <input id="btn" type="submit" onclick="getCityInfo()"; value="submit" > -->
             <button v-on:click="getCity">submit</button>
-
-            <h1>{{city}}</h1>
-
         
         </div>
+        
+        <h1>{{city}} {{gmt}}</h1>
+        <p></p>
+        <p></p>
 
         <span v-if="clicked">
             <!-- for 4 iterations -->
@@ -56,6 +57,7 @@
             return {
                 clicked: false,
                 city: "",
+                gmt:"",
                 date: [],
                 tempStat: [],
                 tempavg: [],
@@ -81,6 +83,7 @@
             prom.then(response => response.json())
                 .then(response => {
                     this.city = response.cityName
+                    this.gmt = response.gmt
                     this.date = response.date
                     this.tempAvg = response.tempAvg
                     this.tempStat = response.tempStat

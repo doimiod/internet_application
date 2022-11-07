@@ -5,6 +5,7 @@ const port = 3000
 const axios = require("axios")
 
 const path = require("path")
+const { error } = require('console')
 
 // let publicPath= path.resolve(__dirname,"public") 
 // app.use(express.static(publicPath))
@@ -34,17 +35,30 @@ function sendWeatherInfo(req, res) {
         var cityName = cityWeatherData.city.name // get the name of the city
         var lat = cityWeatherData.city.coord.lat // get lat
         var lon = cityWeatherData.city.coord.lon // get lon
-
+        var timezone = cityWeatherData.city.timezone
+        timezone = timezone/3600
+        var plusOrMinus = ""
+        if(timezone>=0)
+        plusOrMinus = "+"
+        var timezoneIndicater = "GMT "+plusOrMinus+timezone
         console.log("city name is "+cityName)
         console.log("latitude is "+lat)
         console.log("longtitude is "+lon)
+        console.log(timezoneIndicater)
         console.log("it has "+cityWeatherData.list.length+" data")
 
+        // const sunriseTimeStamp = new Date(cityWeatherData.city.sunrise * 1000);
+        // var sunriseHours = sunriseTimeStamp.getHours();
+        // var sunriseMinutes = sunriseTimeStamp.getMinutes();
 
-        // const date = new Date(unixTimestamp * 1000);
-        // const hours = date.getHours();
-        // const minutes = date.getMinutes();
-        // const seconds = date.getSeconds();
+        // console.log("memo")
+        // console.log(sunriseHours, sunriseMinutes)
+        // console.log("sun rises at "+ sunriseHours + ":" + sunriseMinutes)
+
+        // const sunsetTimeStamp = new Date(cityWeatherData.city.sunset * 1000);
+        // var hours = sunsetTimeStamp.getHours();
+        // var minutes = sunsetTimeStamp.getMinutes();
+        // console.log("sunsets at "+ hours + ":" + minutes)
 
         dateArr = getDate(cityWeatherData)
         tempAvgArr = dataCalc(cityWeatherData)
@@ -65,7 +79,7 @@ function sendWeatherInfo(req, res) {
         contarminated = false
         cityPollutionData = Response.data
         console.log("below is amount of PM2_5")
-        
+
         for(let i = 0; i<cityPollutionData.list.length; i++){
             var amountOfPM2_5 = cityPollutionData.list[i].components.pm2_5
             
@@ -79,6 +93,7 @@ function sendWeatherInfo(req, res) {
         res.json({
             cityName: cityName,
             date: dateArr,
+            gmt: timezoneIndicater,
             tempAvg: tempAvgArr,
             tempStat: tempStatArr,
             highestTemp: highestTempArr,
@@ -88,9 +103,24 @@ function sendWeatherInfo(req, res) {
             rainfallLevel: rainfallLevelArr,
             needMask: contarminated
             });
+        }).catch((error)=>{
+            console.log(error)
+            res.status(400)
+            res.json({
+                error: error
+            })
+    
         })
 
-    })    
+
+    }).catch((error)=>{
+        console.log(error)
+        res.status(400)
+        res.json({
+            error: error
+        })
+
+    })
     
 }
 
@@ -100,10 +130,9 @@ function getDate(cityWeatherData){
     dateArr = []
     k = 0
     console.log("below is time")
-    for(let i = 0; i< cityWeatherData.list.length; i++){
 
+    for(let i = 0; i< cityWeatherData.list.length; i++){
         let date = cityWeatherData.list[i].dt_txt.slice(11, 19)
-        
         console.log(date)
         if(date == "00:00:00" && i!=0){
             dateArr[k] = cityWeatherData.list[i].dt_txt.slice(0, 10)
@@ -114,6 +143,19 @@ function getDate(cityWeatherData){
     }
     return dateArr
 }
+
+// function getDateWithTimeZone(cityWeatherData, timezone, i){
+
+    
+//     date = parseInt(date)
+//     date = date + timezone
+//     if(date >=24)
+//     date = date - 24
+//     else if(date <0)
+//     date = date + 24
+
+//     return date
+// }
 
 
 // all calculations are done here
@@ -139,14 +181,13 @@ function dataCalc(cityWeatherData){
 
     startcalc = false
 
-
     j = 0
     k = 0
 
     for(let i = 0; i< cityWeatherData.list.length; i++){
 
         let time = cityWeatherData.list[i].dt_txt.slice(11, 19)
-        // console.log(time)
+
         if(time == "00:00:00" && startcalc == false){
             startcalc = true
         }
@@ -183,7 +224,7 @@ function dataCalc(cityWeatherData){
             if(tempAvg<12)
             tempStatArr[k] = "cold"
             else if(tempAvg>24)
-            tempStatArr[k] = "cold"
+            tempStatArr[k] = "hot"
             else 
             tempStatArr[k] = "mild"
 
